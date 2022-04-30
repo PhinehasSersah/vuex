@@ -11,6 +11,7 @@
 import { mapGetters } from 'vuex'
 export default {
  name: 'ToDosFile ',
+ 
   computed: mapGetters(['allTodos']),
 
 
