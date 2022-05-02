@@ -1,16 +1,19 @@
 <template>
 <div class="container">
+  <AddTodo />
 <ToDosFile />
 </div>
 </template>
 
 <script>
 import ToDosFile from './components/ToDosFile.vue'
+import AddTodo from './components/AddTodo.vue'
 
 export default {
   name: 'App',
   components: {
-    ToDosFile
+    ToDosFile,
+    AddTodo
   }
 }
 </script>

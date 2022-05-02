@@ -2,20 +2,27 @@
   <h3>Todos App</h3>
   <div class="todos">
     <div v-for="todo in allTodos" :key="todo.id" class="todo">
-        {{todo.title}}
+      {{ todo.title }}
+
+      <div @click="deleteTodo(todo.id)">
+      <i class="fas fa-trash-alt fasv"></i>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from "vuex";
 export default {
- name: 'ToDosFile ',
- 
-  computed: mapGetters(['allTodos']),
-
-
-}
+  name: "ToDosFile ",
+  methods: {
+    ...mapActions(["fetchTodos", "deleteTodo"]),
+  },
+  computed: mapGetters(["allTodos"]),
+  created() {
+    this.fetchTodos() 
+  }
+};
 </script>
 
 <style scoped>
@@ -32,5 +39,12 @@ export default {
   text-align: center;
   position: relative;
   cursor: pointer;
+}
+.fasv {
+  position:absolute;
+  bottom: 10px;
+  right: 10px;
+  color: #fff;
+  cursor: pointer; 
 }
 </style>

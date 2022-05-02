@@ -1,29 +1,48 @@
-// import axios from "axios";
+import axios from "axios";
 
 const state = {
-    todos: [
-        {
-            id: 1,
-            title: 'Learn Vue.js state management',
-        },
-        {
-            id: 2,
-            title: 'Master JavaScript',
-        },
-        {
-            id: 3,
-            title: 'Start ALX full stack development',
-        }
-    ]
+    todos: []
 };
 
 const getters = {
     allTodos: myState => myState.todos,
 };
 
-const actions = {};
+const actions = {
+    async fetchTodos({ commit }) {
+        try {
+            const response = await axios.get('https://jsonplaceholder.typicode.com/todos');
+            commit('setTodos', response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    async addTodo({ commit }, title) {
+        try {
+            const response = await axios.post('https://jsonplaceholder.typicode.com/todos', {
+                title,
+                completed: false
+            });
+            commit('newTodo', response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    async deleteTodo({ commit }, id) {
+        try {
+            await axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`);
+            commit('removeTodo', id);
+        } catch (error) {
+            console.log(error)
+        }
+    }
+};
 
-const mutations = {};
+const mutations = {
+    setTodos: (mystate, todos) => (mystate.todos = todos),
+    newTodo: (mystate, todo) => mystate.todos.unshift(todo),
+    removeTodo:(mystate, id) => mystate.todos = mystate.todos.filter(todo => todo.id !== id) 
+};
 
 export default {
     state,
