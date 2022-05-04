@@ -35,13 +35,25 @@ const actions = {
         } catch (error) {
             console.log(error)
         }
+    },
+    async filterTodos( {commit}, event) {
+    
+        let selectValue = event.target.options[event.target.options.selectedIndex].value;
+        try {
+           const response =  await axios.get(`https://jsonplaceholder.typicode.com/todos?_limit= ${selectValue}`)
+            commit('setTodos', response.data);
+            // console.log(response.data)
+        } catch(error)  {
+            console.log(error)
+        }
+
     }
 };
 
 const mutations = {
     setTodos: (mystate, todos) => (mystate.todos = todos),
     newTodo: (mystate, todo) => mystate.todos.unshift(todo),
-    removeTodo:(mystate, id) => mystate.todos = mystate.todos.filter(todo => todo.id !== id) 
+    removeTodo:(mystate, id) => mystate.todos = mystate.todos.filter(todo => todo.id !== id),
 };
 
 export default {
