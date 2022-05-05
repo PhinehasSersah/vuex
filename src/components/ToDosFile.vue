@@ -1,11 +1,21 @@
 <template>
   <h3>Todos App</h3>
+  <div class="legend">
+    <span>Double click to mark as complete</span>
+    <span> <span class="incomplete-box"></span> = Incomplete </span>
+    <span> <span class="complete-box"></span> = Complete </span>
+  </div>
   <div class="todos">
-    <div v-for="todo in allTodos" :key="todo.id" class="todo">
+    <div
+      @dblclick="onDoubleClick(todo)"
+      v-for="todo in allTodos"
+      :key="todo.id"
+      class="todo"
+      :class="{'is-complete':todo.completed}"
+    >
       {{ todo.title }}
-
       <div @click="deleteTodo(todo.id)">
-      <i class="fas fa-trash-alt fasv"></i>
+        <i class="fas fa-trash-alt fasv"></i>
       </div>
     </div>
   </div>
@@ -16,12 +26,20 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   name: "ToDosFile ",
   methods: {
-    ...mapActions(["fetchTodos", "deleteTodo"]),
+    ...mapActions(["fetchTodos", "deleteTodo","updateTodo"]),
+    onDoubleClick(todo) {
+      const updatedTodo = {
+        id: todo.id,
+        title: todo.title,
+        completed: !todo.completed,
+      };
+      this.updateTodo(updatedTodo);
+    },
   },
   computed: mapGetters(["allTodos"]),
   created() {
-    this.fetchTodos() 
-  }
+    this.fetchTodos();
+  },
 };
 </script>
 
@@ -41,10 +59,36 @@ export default {
   cursor: pointer;
 }
 .fasv {
-  position:absolute;
+  position: absolute;
   bottom: 10px;
   right: 10px;
   color: #fff;
-  cursor: pointer; 
+  cursor: pointer;
+}
+.legend {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 1rem;
+}
+.complete-box {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: red;
+}
+.incomplete-box {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: #41b883;
+}
+.is-complete {
+  background: red;
+  color: #fff;
+}
+@media (max-width: 500px) {
+  .todos {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
